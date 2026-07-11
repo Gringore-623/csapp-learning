@@ -1,239 +1,166 @@
-# CS:APP Learning Repository
+# CS:APP Learning
 
-This repository records my study of **Computer Systems: A Programmer’s Perspective, 3rd Edition** and the corresponding systems programming experiments.
-
-The goal is not only to finish the labs, but to understand the complete path from C source code to machine execution:
+本仓库记录我基于 *Computer Systems: A Programmer’s Perspective*（CS:APP）开展的系统学习与实验。目标不是只让代码通过测试，而是建立从 C 源程序到机器执行的完整、可验证的理解：
 
 ```text
-C source code
-    ↓
-Compilation and linking
-    ↓
-Assembly instructions
-    ↓
-Processor and memory hierarchy
-    ↓
-Processes, virtual memory and system calls
-    ↓
-Concurrent and network programs
+C source → preprocessing / compilation / assembly / linking
+         → ISA and machine code
+         → processor, pipeline, cache and memory hierarchy
+         → process, virtual memory and system calls
+         → I/O, networking and concurrency
 ```
 
-## Textbook
+每个实验最终都应回答：功能做了什么、软件如何表达、硬件或操作系统如何支撑，以及它如何影响正确性、性能、安全性或资源开销。
 
-**Computer Systems: A Programmer’s Perspective, 3rd Edition, North American Edition**
+## 教材与页码口径
 
-All experiment notes in this repository use the page numbers of this edition unless otherwise stated.
+- 教材：Randal E. Bryant, David R. O’Hallaron, *Computer Systems: A Programmer’s Perspective, Third Global Edition*, 2016。
+- 本仓库默认使用该版本的**教材印刷页码**，不与 North American Edition 页码混用。
+- 每个实验的阅读指南必须注明章节、小节、印刷页码；必要时同时注明 PDF 页码和版本差异。
+- README 中的章节范围用于导航；开始具体实验前，应重新查阅教材和实验说明，生成精确阅读清单。
 
-## Current Progress
+统一标注格式：
 
-| Module                           |    Status | Main Topics                                                | Textbook             |
-| -------------------------------- | --------: | ---------------------------------------------------------- | -------------------- |
-| Hello Build Chain                | Completed | GCC, Makefile, ELF, compilation stages                     | Chapter 1, Chapter 7 |
-| Data Representation Lab          | Completed | Bit operations, two’s complement, integer comparison       | Chapter 2            |
-| Machine-Level Programming Basics | Completed | x86-64 registers, addressing, loops, compiler optimization | Chapter 3            |
-| Bomb Lab                         |   Planned | Assembly analysis, control flow, stack frames, GDB         | Chapter 3            |
-| Architecture Lab                 |   Planned | Y86-64, pipelining, hazards, forwarding                    | Chapter 4            |
-| Cache Lab                        |   Planned | Cache mapping, locality, LRU, matrix blocking              | Chapter 6            |
-| Shell Lab                        |   Planned | Processes, signals, job control, race conditions           | Chapter 8            |
-| Malloc Lab                       |   Planned | Virtual memory, heap blocks, free lists, coalescing        | Chapter 9            |
-| Proxy Lab                        |   Planned | System I/O, sockets, HTTP, concurrency                     | Chapters 10–12       |
+```text
+Chapter 3, Sections 3.6–3.10, pp. 236–328
+（CS:APP Third Global Edition, 2016；PDF 页码另行注明）
+```
 
-## Repository Structure
+## 当前进度
+
+| 模块 | 状态 | 主要内容 | 教材对应（Global Edition） |
+| --- | --- | --- | --- |
+| Hello Build Chain | 已完成 | GCC、Makefile、ELF、编译与链接阶段 | Ch. 1；Ch. 7 |
+| Data Representation Lab | 已完成 | 位运算、补码、整数比较 | Ch. 2, §§2.1–2.4, pp. 69–160 |
+| Machine-Level Programming Basics | 已完成 | x86-64、寻址、循环、编译器优化 | Ch. 3, §§3.1–3.6, pp. 199–273 |
+| Bomb Lab | 计划中 | 汇编分析、控制流、栈帧、GDB | Ch. 3，精确页码待实验说明确认 |
+| Architecture Lab | 计划中 | Y86-64、流水线、冒险与转发 | Ch. 4 |
+| Cache Lab | 计划中 | Cache 映射、局部性、LRU、分块 | Ch. 6 |
+| Shell Lab | 计划中 | 进程、信号、作业控制、竞态 | Ch. 8 |
+| Malloc Lab | 计划中 | 堆块、空闲链表、合并、虚拟内存 | Ch. 9 |
+| Proxy Lab | 计划中 | 系统 I/O、Socket、HTTP、并发 | Chs. 10–12 |
+
+> “计划中”模块只标章节，不预先假定实验版本。精确页码必须在读取对应实验 handout 后确定。
+
+## 仓库结构
 
 ```text
 csapp-learning/
 ├── README.md
-├── notes/
-├── mini-projects/
+├── notes/                  # 跨实验的概念笔记
+├── mini-projects/          # 为验证单一机制而设计的小实验
 │   ├── hello-build-chain/
 │   └── machine-level-basics/
 ├── labs/
 │   └── data-lab/
-├── reports/
-└── tools/
+├── reports/                # 阶段总结与综合报告
+└── tools/                  # 可复用脚本与辅助工具
 ```
 
-## Completed Experiments
-
-### 1. Hello Build Chain
-
-Location:
+新实验建议采用统一结构：
 
 ```text
-mini-projects/hello-build-chain/
+labs/<lab-name>/
+├── 00-overview.md          # 目标、输入输出、约束和验收标准
+├── 01-reading-guide.md     # 章节、小节、印刷页码和阅读问题
+├── 02-concepts.md          # 术语、机制、流程和常见误区
+├── 03-baseline.md          # 环境、原始构建结果和基线
+├── src/                    # 实现代码
+├── tests/                  # 自建测试与边界用例
+├── logs/                   # 可复现的关键日志
+└── README.md               # 构建、运行、结果、限制与总结
 ```
 
-This experiment studies how a C source file becomes an executable program.
+## 标准实验流程
+
+1. **实验定位**：明确目标、输入输出、约束、评分指标及系统层次。
+2. **教材定向阅读**：按实验说明确定必读/选读内容及准确页码。
+3. **概念扫盲**：解释术语、执行流程、具体例子和常见误区。
+4. **环境与基线**：记录 OS、架构、工具版本、编译参数与初始结果。
+5. **最小验证实验**：用小程序单独验证关键机制。
+6. **正式实现**：先做最小正确版本，再处理边界情况。
+7. **测试与调试**：保留命令、输入、预期输出和关键证据。
+8. **性能分析**：正确性建立后再测量和优化。
+9. **总结复盘**：解释软件、ISA、硬件/OS 之间的因果链路。
+10. **版本控制**：只提交可解释、可复现且允许公开的材料。
+
+实现顺序固定为：
 
 ```text
-hello.c
-   ↓ preprocessing
-hello.i
-   ↓ compilation
-hello.s
-   ↓ assembly
-hello.o
-   ↓ linking
-hello
+理解问题 → 建立系统模型 → 设计最小实验 → 最小正确实现
+         → 测试 → 调试 → 测量 → 优化 → 总结
 ```
 
-Main tools:
+## AI 协作规则
 
-```bash
-gcc
-make
-objdump
-readelf
-nm
-file
-size
+默认采用分级提示，避免在学习阶段直接替代独立分析：
+
+| Level | 支持范围 |
+| --- | --- |
+| 0 | 澄清问题、输入输出和约束 |
+| 1 | 指向相关章节、数据结构或系统机制 |
+| 2 | 提供局部思路、伪代码或调试观察点 |
+| 3 | 分析已有代码中的具体错误 |
+| 4 | 仅在明确要求时提供完整参考实现 |
+
+每次开始新实验时，应先读取教材与该实验说明，再生成当次计划；不能仅凭通用模板臆测页码、评分规则或实现约束。
+
+## 已完成项目
+
+### Hello Build Chain
+
+位置：`mini-projects/hello-build-chain/`
+
+观察 C 程序成为 ELF 可执行文件的过程：
+
+```text
+hello.c → hello.i → hello.s → hello.o → hello
 ```
-
-Build and run:
 
 ```bash
 cd mini-projects/hello-build-chain
 make
 ./hello
-```
-
-Clean generated files:
-
-```bash
 make clean
 ```
 
-### 2. Data Representation Lab
+主要工具：`gcc`、`make`、`objdump`、`readelf`、`nm`、`file`、`size`。
 
-Location:
+### Data Representation Lab
 
-```text
-labs/data-lab/
-```
+位置：`labs/data-lab/`
 
-Implemented functions:
-
-```text
-bit_xor
-is_tmax
-negate_int
-is_ascii_digit
-is_less_or_equal
-```
-
-Main topics:
-
-* Bitwise operations
-* Two’s-complement representation
-* Signed integer boundaries
-* Arithmetic right shift
-* Integer overflow
-* Compiler-generated assembly
-
-Build and test:
+已实现：`bit_xor`、`is_tmax`、`negate_int`、`is_ascii_digit`、`is_less_or_equal`。
 
 ```bash
 cd labs/data-lab
 make
 make test
-```
-
-Generate and inspect object symbols:
-
-```bash
 nm bits.o
-```
-
-Generate disassembly:
-
-```bash
 objdump -d -Mintel test_bits
 ```
 
-Textbook correspondence:
+教材对应：Chapter 2；Information Storage (§2.1, pp. 69–94)、Integer Representations (§2.2, pp. 95–119)、Integer Arithmetic (§2.3, pp. 120–143)、Floating Point (§2.4, pp. 144–160)，均为 Third Global Edition, 2016 的印刷页码。
 
-* Chapter 2: Representing and Manipulating Information
-* Information Storage: pp. 31–67
-* Integer Representations: pp. 68–88
-* Integer Arithmetic: pp. 89–121
-* Floating Point: pp. 122–160
+### Machine-Level Programming Basics
 
-### 3. Machine-Level Programming Basics
+位置：`mini-projects/machine-level-basics/`
 
-Location:
-
-```text
-mini-projects/machine-level-basics/
-```
-
-Implemented functions:
-
-```c
-long add_numbers(long x, long y);
-long get_element(const long *array, long index);
-long sum_array(const long *array, long length);
-```
-
-Main topics:
-
-* System V AMD64 calling convention
-* Function arguments in registers
-* Return values in `%rax`
-* Indexed addressing
-* Array access
-* Loop translation
-* Comparison of `-O0`, `-Og` and `-O2`
-* ELF disassembly
-
-Build and test:
+内容包括 System V AMD64 calling convention、寄存器传参、数组寻址、循环翻译，以及 `-O0`、`-Og`、`-O2` 生成代码的比较。
 
 ```bash
 cd mini-projects/machine-level-basics
 make
 make test
-```
-
-Generate assembly at different optimization levels:
-
-```bash
 make assembly
-```
-
-Generate disassembly of the final executable:
-
-```bash
 make disassemble
 ```
 
-Example instruction:
+教材对应：Chapter 3, §§3.1–3.6, pp. 199–273（Third Global Edition, 2016）。其中 Program Encodings 从 p. 205、Accessing Information 从 p. 215、Control 从 p. 236 开始。
 
-```asm
-mov rax, QWORD PTR [rdi+rsi*8]
-```
+## 构建、测试与复现
 
-Interpretation:
-
-```text
-rdi = array base address
-rsi = array index
-rsi × 8 = byte offset of a long element
-rax = array[index]
-```
-
-Textbook correspondence:
-
-* Chapter 3: pp. 177–362
-* Program Encodings: pp. 180–190
-* Data Formats: pp. 191–195
-* Accessing Information: pp. 196–213
-* Arithmetic and Logical Operations: pp. 214–228
-* Control and Loops: pp. 229–266
-
-## Build Conventions
-
-The projects use GCC and Make.
-
-Typical commands:
+常用命令：
 
 ```bash
 make
@@ -241,194 +168,48 @@ make test
 make clean
 ```
 
-Compiler flags commonly used:
+常用编译参数：
 
 ```text
--std=c11
--Wall
--Wextra
--Wpedantic
--Og
--g
+-std=c11 -Wall -Wextra -Wpedantic -Og -g
 ```
 
-Meanings:
+每个实验 README 至少记录：操作系统与架构、编译器版本、依赖工具、完整构建命令、测试输入、预期输出和已知限制。优化必须建立在可编译、功能正确、边界正确、无未定义行为和内存错误的基础上，并附测量证据。
 
-* `-Wall -Wextra`: enable common warnings
-* `-Wpedantic`: check ISO C compatibility
-* `-Og`: keep useful optimizations while preserving debuggability
-* `-g`: include debugging information for GDB
-
-## Debugging Tools
-
-### GDB
-
-```bash
-gdb ./program
-```
-
-Common commands:
-
-```gdb
-break main
-run
-next
-step
-stepi
-info registers
-x/i $pc
-disassemble
-continue
-quit
-```
-
-### Objdump
-
-```bash
-objdump -d -Mintel program
-```
-
-### Readelf
-
-```bash
-readelf -h program
-readelf -S program
-readelf -s program
-```
-
-### NM
-
-```bash
-nm object-file.o
-```
-
-## Git Workflow
-
-Check changes:
+## Git 工作流
 
 ```bash
 git status
+git switch -c <topic-branch>
+git add <明确属于本次工作的文件>
+git commit -m "docs: describe the completed work"
+git push -u origin <topic-branch>
 ```
 
-Add files:
-
-```bash
-git add .
-```
-
-Commit:
-
-```bash
-git commit -m "feat: describe the completed work"
-```
-
-Push:
-
-```bash
-git push
-```
-
-Commit message examples:
+提交信息示例：
 
 ```text
 feat: add data representation lab
-feat: add machine-level programming basics lab
 fix: correct signed comparison edge case
-test: add integer boundary test cases
+test: add integer boundary cases
 docs: document x86-64 indexed addressing
 ```
 
-## Learning Method
+生成的二进制、目标文件、core dump 和 IDE 配置通常不应提交；用于分析的汇编或反汇编文件可在说明用途后保留。
 
-Each experiment follows the same workflow:
+## 学术诚信与公开范围
 
-```text
-Read textbook
-    ↓
-Understand the system concept
-    ↓
-Implement a minimal program
-    ↓
-Compile and test
-    ↓
-Inspect assembly or runtime state
-    ↓
-Debug with GDB
-    ↓
-Write conclusions
-    ↓
-Commit to GitHub
-```
+本仓库用于个人学习和实验记录。不得公开上传：
 
-For each topic, the notes should answer:
+- 课程或实验许可禁止再分发的 starter code 与评分资源；
+- 标准实验的完整受限答案；
+- Bomb Lab 输入串或等价解答；
+- 含密钥、令牌、个人信息或第三方版权限制的文件。
 
-1. What problem does this mechanism solve?
-2. How is it represented in C?
-3. How is it implemented in assembly or hardware?
-4. Which edge cases can cause errors?
-5. How can the behavior be verified experimentally?
-
-## Planned Learning Path
-
-```text
-Compilation and Linking
-        ↓
-Data Representation
-        ↓
-Machine-Level Programming
-        ↓
-Bomb Lab
-        ↓
-Processor Architecture
-        ↓
-Cache Lab
-        ↓
-Processes and Signals
-        ↓
-Shell Lab
-        ↓
-Virtual Memory
-        ↓
-Malloc Lab
-        ↓
-System I/O and Networking
-        ↓
-Proxy Lab
-```
-
-## Notes
-
-Generated binaries and object files should normally not be committed.
-
-Recommended `.gitignore` entries:
-
-```gitignore
-*.o
-*.out
-*.a
-*.so
-*.core
-core
-.vscode/
-.idea/
-build/
-
-hello
-test_bits
-show_bits
-test_machine
-```
-
-Assembly files and disassembly files may be retained when they are used as learning material.
-
-## Academic Integrity
-
-This repository is intended for personal learning and documentation.
-
-Course-provided starter code, restricted lab solutions, bomb answers or other materials that are not permitted for public distribution should not be uploaded to a public repository.
+公开内容应优先包括独立编写的最小实验、分析过程、测试方法、调试证据和学习总结。
 
 ## Author
 
 Runcheng Zhang
 
-Graduate student in Electrical Engineering and Information Technology at Karlsruhe Institute of Technology, focusing on embedded systems, systems engineering and hardware-software co-design.
+M.Sc. student in Electrical Engineering and Information Technology at Karlsruhe Institute of Technology, focusing on embedded systems, systems engineering and hardware-software co-design.
