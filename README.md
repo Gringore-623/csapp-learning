@@ -31,7 +31,8 @@ Chapter 3, Sections 3.6–3.10, pp. 236–328
 | 模块 | 状态 | 主要内容 | 教材对应（Global Edition） |
 | --- | --- | --- | --- |
 | Hello Build Chain | 已完成 | GCC、Makefile、ELF、编译与链接阶段 | Ch. 1；Ch. 7 |
-| Data Representation Lab | 已完成 | 位运算、补码、整数比较 | Ch. 2, §§2.1–2.4, pp. 69–160 |
+| Data Lab 前置子集 | 已完成 | 五个自建整数位运算练习；不等同于完整官方实验 | Ch. 2, §§2.1–2.3, pp. 69–143 |
+| Official Data Lab | **M0 进行中** | 材料审计、实验定位、教材阅读路线；等待具体 handout/starter code | Ch. 2, §§2.1–2.4, pp. 69–160 |
 | Machine-Level Programming Basics | 已完成 | x86-64、寻址、循环、编译器优化 | Ch. 3, §§3.1–3.6, pp. 199–273 |
 | Bomb Lab | 计划中 | 汇编分析、控制流、栈帧、GDB | Ch. 3，精确页码待实验说明确认 |
 | Architecture Lab | 计划中 | Y86-64、流水线、冒险与转发 | Ch. 4 |
@@ -40,7 +41,7 @@ Chapter 3, Sections 3.6–3.10, pp. 236–328
 | Malloc Lab | 计划中 | 堆块、空闲链表、合并、虚拟内存 | Ch. 9 |
 | Proxy Lab | 计划中 | 系统 I/O、Socket、HTTP、并发 | Chs. 10–12 |
 
-> “计划中”模块只标章节，不预先假定实验版本。精确页码必须在读取对应实验 handout 后确定。
+> 当前正式实验是 **Official Data Lab**。仓库原有五函数实现只作为前置概念练习；在读取具体版本 handout、starter code、README、Makefile 和测试脚本之前，不预设正式函数列表、限制或评分命令。
 
 ## 仓库结构
 
@@ -105,6 +106,19 @@ labs/<lab-name>/
 
 每次开始新实验时，应先读取教材与该实验说明，再生成当次计划；不能仅凭通用模板臆测页码、评分规则或实现约束。
 
+## 当前进行项目
+
+### Official Data Lab — M0
+
+位置：`labs/data-lab/`
+
+已生成：
+
+- `00-overview.md`：区分前置子集与正式实验，记录目标、材料状态和里程碑；
+- `01-reading-guide.md`：给出 Chapter 2 的小节、Third Global Edition 印刷页码和阅读问题。
+
+当前材料状态：教材、通用 workflow、路线图和前置练习已具备；具体版本 handout、starter code、课程测试脚本与公开许可规则仍待取得并审计。在材料到位前，不声明 Official Data Lab 已通过，也不向 public repository 上传受限文件或完整标准答案。
+
 ## 已完成项目
 
 ### Hello Build Chain
@@ -126,11 +140,11 @@ make clean
 
 主要工具：`gcc`、`make`、`objdump`、`readelf`、`nm`、`file`、`size`。
 
-### Data Representation Lab
+### Data Lab 前置子集
 
 位置：`labs/data-lab/`
 
-已实现：`bit_xor`、`is_tmax`、`negate_int`、`is_ascii_digit`、`is_less_or_equal`。
+已实现：`bit_xor`、`is_tmax`、`negate_int`、`is_ascii_digit`、`is_less_or_equal`。这些函数用于前置概念训练，不代表某一具体课程版本的完整 Official Data Lab 已完成。
 
 ```bash
 cd labs/data-lab
