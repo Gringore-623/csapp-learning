@@ -9,6 +9,18 @@ int is_tmax(int x){
     return !(~(x ^ y)) & !!y;
 }
 
+//x     = 01111111 11111111 11111111 11111111 maximum 32-bit signed integer
+//x + 1 = 10000000 00000000 00000000 00000000
+//x ^ y = all 1 == -1
+//!(~(x ^ y)): x and x+1 bitwise reverse?
+//why use !!y? example: if x+1 equal to 0, so x = -1 
+//x     = 11111111 11111111 11111111 11111111
+//x + 1 = 00000000 00000000 00000000 00000000 = y
+//-1 ^ 0 = -1 so !(~(x ^ y)) will consider -1 as maximum we use !!y to filter
+//y == 0    → !!y == 0
+//y != 0    → !!y == 1
+
+
 int negate_int(int x){
     return ~x + 1;
 }
